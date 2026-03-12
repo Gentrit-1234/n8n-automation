@@ -2,19 +2,31 @@ version: "3"
 
 services:
   n8n:
-    image: n8nio/n8n
+    image: n8nio/n8n:latest
     ports:
       - "5678:5678"
     volumes:
-      - n8n-data:/home/node/.n8n  # persistent disk
+      # This is local persistent storage for workflows, credentials, DB
+      - n8n-data:/home/node/.n8n
     environment:
+      # Basic Auth for accessing n8n editor
       - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
       - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+
+      # Timezone for n8n
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
-      - N8N_ENABLE_CORS=${N8N_ENABLE_CORS}
-      - N8N_CORS_ORIGINS=${N8N_CORS_ORIGINS}
-      - N8N_CORS_ALLOW_CREDENTIALS=${N8N_CORS_ALLOW_CREDENTIALS}
+
+      # CORS settings for frontend
+      - N8N_ENABLE_CORS=${N8N_ENABLE_CORS}                # true/false
+      - N8N_CORS_ORIGINS=${N8N_CORS_ORIGINS}            # e.g. https://myfrontend.com
+      - N8N_CORS_ALLOW_CREDENTIALS=${N8N_CORS_ALLOW_CREDENTIALS}  # true/false
+
+      # Production URLs (important on Render)
+      - N8N_HOST=${N8N_HOST}                            # e.g. my-n8n-app.onrender.com
+      - N8N_PROTOCOL=${N8N_PROTOCOL}                    # http or https
+      - WEBHOOK_URL=${WEBHOOK_URL}                      # e.g. https://my-n8n-app.onrender.com/
+
 volumes:
   n8n-data:
     driver: local
