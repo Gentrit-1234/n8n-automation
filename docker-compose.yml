@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n-data:/home/node/.n8n  # persistent disk
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - N8N_ENABLE_CORS=${N8N_ENABLE_CORS}
+      - N8N_CORS_ORIGINS=${N8N_CORS_ORIGINS}
+      - N8N_CORS_ALLOW_CREDENTIALS=${N8N_CORS_ALLOW_CREDENTIALS}
+volumes:
+  n8n-data:
+    driver: local
